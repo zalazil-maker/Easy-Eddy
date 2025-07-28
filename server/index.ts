@@ -49,6 +49,16 @@ try {
     });
   } else {
     console.log(`${new Date().toLocaleTimeString()} [startup] Setting up Vite for development...`);
+    // Add a catch-all handler for non-API routes before Vite
+    app.get("*", (req, res, next) => {
+      // Only handle non-API routes with Vite
+      if (req.path.startsWith('/api/') || req.path.startsWith('/admin')) {
+        return next(); // Let API routes be handled normally
+      }
+      // For all other routes, let Vite handle them
+      next();
+    });
+    
     // In development, let Vite handle the frontend
     try {
       const viteModule = await import("./vite.js");
