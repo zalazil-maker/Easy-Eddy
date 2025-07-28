@@ -77,7 +77,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       (!user.subscriptionEndDate || user.subscriptionEndDate > new Date());
 
     const currentTier = isSubscriptionActive ? user.subscriptionTier : 'free';
-    const limits = SUBSCRIPTION_LIMITS[currentTier] || SUBSCRIPTION_LIMITS.free;
+    const limits = SUBSCRIPTION_LIMITS[currentTier || 'free'] || SUBSCRIPTION_LIMITS.free;
 
     // Check daily usage
     const today = new Date().toISOString().split('T')[0];

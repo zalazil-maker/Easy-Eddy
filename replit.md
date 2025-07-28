@@ -13,6 +13,9 @@ JobHackr is an AI-powered job application automation platform focused on the Fre
 - **Fixed Vercel deployment error: simplified vercel.json to remove problematic runtime specification**
 - **CRITICAL: Fixed all TypeScript compilation errors across the entire codebase**
 - **Resolved import issues, property mismatches, API version conflicts, and type inconsistencies**
+- **Consolidated API endpoints to meet Vercel's 12-function limit (now 11 functions)**
+- **Combined AI services (translate, cover letter, CV optimization) into single endpoint**
+- **Merged job-related APIs (search, applications) for better organization**
 - **Application now compiles error-free and ready for production deployment**
 - **Privacy policy includes contact email merefuker@gmail.com and GDPR compliance**
 - **Terms include detailed subscription tiers and user responsibilities**
