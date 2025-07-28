@@ -17,19 +17,19 @@ app.use(cors());
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
-// Initialize routes (includes API routes and database setup)
+// Health check endpoint (first, before anything else)
+app.get('/health', (req, res) => {
+  res.json({ 
+    status: 'healthy', 
+    environment: process.env.NODE_ENV || 'development',
+    timestamp: new Date().toISOString()
+  });
+});
+
+// Initialize routes (includes API routes and database setup) - MUST be before Vite
 try {
   console.log(`${new Date().toLocaleTimeString()} [startup] Setting up routes and database...`);
   const httpServer = await registerRoutes(app);
-  
-  // Health check endpoint (before Vite middleware)
-  app.get('/health', (req, res) => {
-    res.json({ 
-      status: 'healthy', 
-      environment: process.env.NODE_ENV || 'development',
-      timestamp: new Date().toISOString()
-    });
-  });
   
   // Serve built React frontend in production
   const isProduction = process.env.NODE_ENV === 'production';
@@ -49,15 +49,8 @@ try {
     });
   } else {
     console.log(`${new Date().toLocaleTimeString()} [startup] Setting up Vite for development...`);
-    // Add a catch-all handler for non-API routes before Vite
-    app.get("*", (req, res, next) => {
-      // Only handle non-API routes with Vite
-      if (req.path.startsWith('/api/') || req.path.startsWith('/admin')) {
-        return next(); // Let API routes be handled normally
-      }
-      // For all other routes, let Vite handle them
-      next();
-    });
+    // Ensure API routes are prioritized before Vite middleware
+    console.log(`${new Date().toLocaleTimeString()} [startup] API routes registered before Vite middleware`);
     
     // In development, let Vite handle the frontend
     try {
