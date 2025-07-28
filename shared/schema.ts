@@ -37,7 +37,7 @@ export const users = pgTable("users", {
   sessionToken: text("session_token"),
   
   // Subscription fields
-  subscriptionTier: text("subscription_tier").default("free"), // "free", "weekly", "monthly", "premium"
+  subscriptionType: text("subscription_type").default("free"), // "free", "weekly", "monthly", "premium"
   subscriptionStatus: text("subscription_status").default("active"), // "active", "canceled", "expired"
   stripeCustomerId: text("stripe_customer_id"),
   stripeSubscriptionId: text("stripe_subscription_id"),

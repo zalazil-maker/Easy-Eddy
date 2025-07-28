@@ -102,7 +102,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         linkedinProfile: linkedinProfile || null,
         isApproved: false,
         hasCompletedOnboarding: false,
-        subscriptionTier: "free",
+        subscriptionType: "free",
         lastLoginIp: ipAddress,
         privacyAcceptedAt: new Date(),
         termsAcceptedAt: new Date(),
@@ -122,7 +122,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           email: user.email,
           isApproved: user.isApproved,
           hasCompletedOnboarding: user.hasCompletedOnboarding,
-          subscriptionTier: user.subscriptionTier,
+          subscriptionTier: user.subscriptionType,
         }
       });
     } catch (error) {
@@ -158,7 +158,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           email: user.email,
           isApproved: user.isApproved,
           hasCompletedOnboarding: user.hasCompletedOnboarding,
-          subscriptionTier: user.subscriptionTier,
+          subscriptionTier: user.subscriptionType,
         }
       });
     } catch (error) {
@@ -183,7 +183,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         email: user.email,
         isApproved: user.isApproved,
         hasCompletedOnboarding: user.hasCompletedOnboarding,
-        subscriptionTier: user.subscriptionTier,
+        subscriptionTier: user.subscriptionType,
       });
     } catch (error) {
       console.error("User fetch error:", error);
