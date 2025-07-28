@@ -7,6 +7,7 @@ import { LanguageProvider } from "@/contexts/LanguageContext";
 import JobHackrDashboard from "@/pages/JobHackrDashboard";
 import PrivacyPolicy from "@/pages/PrivacyPolicy";
 import TermsOfService from "@/pages/TermsOfService";
+import Onboarding from "@/pages/onboarding";
 import NotFound from "@/pages/NotFound";
 
 const queryClient = new QueryClient({
@@ -28,6 +29,7 @@ function Router() {
     <Switch>
       <Route path="/" component={JobHackrDashboard} />
       <Route path="/dashboard" component={JobHackrDashboard} />
+      <Route path="/onboarding" component={Onboarding} />
       <Route path="/privacy-policy" component={PrivacyPolicy} />
       <Route path="/terms-of-service" component={TermsOfService} />
       <Route component={NotFound} />

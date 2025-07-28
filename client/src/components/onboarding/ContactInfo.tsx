@@ -10,7 +10,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Eye, EyeOff } from "lucide-react";
 import { insertUserSchema } from "@shared/schema";
-import { PrivacyConsent } from "@/components/PrivacyConsent";
+
 
 const contactInfoSchema = insertUserSchema.extend({
   email: z.string().email("Please enter a valid email address"),
@@ -75,7 +75,7 @@ export default function ContactInfo({ data, onUpdate }: ContactInfoProps) {
           className="mt-1"
         />
         {form.formState.errors.email && (
-          <p className="text-sm text-red-600 mt-1">{form.formState.errors.email.message}</p>
+          <p className="text-sm text-red-600 mt-1">{String(form.formState.errors.email.message || 'Invalid email')}</p>
         )}
       </div>
 
@@ -106,7 +106,7 @@ export default function ContactInfo({ data, onUpdate }: ContactInfoProps) {
           </button>
         </div>
         {form.formState.errors.password && (
-          <p className="text-sm text-red-600 mt-1">{form.formState.errors.password.message}</p>
+          <p className="text-sm text-red-600 mt-1">{String(form.formState.errors.password.message || 'Invalid password')}</p>
         )}
       </div>
 
@@ -137,7 +137,7 @@ export default function ContactInfo({ data, onUpdate }: ContactInfoProps) {
           </button>
         </div>
         {form.formState.errors.confirmPassword && (
-          <p className="text-sm text-red-600 mt-1">{form.formState.errors.confirmPassword.message}</p>
+          <p className="text-sm text-red-600 mt-1">{String(form.formState.errors.confirmPassword.message || 'Passwords must match')}</p>
         )}
       </div>
 
@@ -155,7 +155,7 @@ export default function ContactInfo({ data, onUpdate }: ContactInfoProps) {
           className="mt-1"
         />
         {form.formState.errors.phone && (
-          <p className="text-sm text-red-600 mt-1">{form.formState.errors.phone.message}</p>
+          <p className="text-sm text-red-600 mt-1">{String(form.formState.errors.phone.message || 'Invalid phone number')}</p>
         )}
       </div>
 
@@ -298,13 +298,37 @@ export default function ContactInfo({ data, onUpdate }: ContactInfoProps) {
 
       <Card className="bg-gray-50">
         <CardContent className="p-4">
-          <PrivacyConsent
-            checked={data.privacyPolicyAccepted || false}
-            onChange={(checked) => {
-              console.log("Privacy checkbox changed:", checked);
-              handleInputChange("privacyPolicyAccepted", checked);
-            }}
-          />
+          <div className="flex items-start space-x-3">
+            <Checkbox
+              id="privacy"
+              checked={data.privacyPolicyAccepted || false}
+              onCheckedChange={(checked) => {
+                console.log("Privacy checkbox changed:", checked);
+                handleInputChange("privacyPolicyAccepted", checked);
+              }}
+              className="mt-1"
+            />
+            <Label htmlFor="privacy" className="text-sm text-gray-700 leading-5">
+              I agree to the{" "}
+              <a 
+                href="/privacy-policy" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-blue-600 hover:text-blue-800 underline"
+              >
+                Privacy Policy
+              </a>
+              {" "}and{" "}
+              <a 
+                href="/terms-of-service" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-blue-600 hover:text-blue-800 underline"
+              >
+                Terms of Service
+              </a>
+            </Label>
+          </div>
         </CardContent>
       </Card>
     </div>
