@@ -368,7 +368,7 @@ export class DatabaseStorage implements IStorage {
   async createUserPreferences(preferences: InsertUserPreferences): Promise<UserPreferences> {
     const [prefs] = await db
       .insert(userPreferences)
-      .values([preferences])
+      .values(preferences)
       .returning();
     return prefs;
   }
@@ -433,10 +433,18 @@ export class DatabaseStorage implements IStorage {
     return userCV;
   }
 
-  async deleteUserCV(userId: number, cvId: number): Promise<void> {
-    await db
-      .delete(userCVs)
-      .where(and(eq(userCVs.userId, userId), eq(userCVs.id, cvId)));
+  async deleteUserCV(id: number): Promise<void>;
+  async deleteUserCV(userId: number, cvId: number): Promise<void>;
+  async deleteUserCV(userIdOrId: number, cvId?: number): Promise<void> {
+    if (cvId !== undefined) {
+      await db
+        .delete(userCVs)
+        .where(and(eq(userCVs.userId, userIdOrId), eq(userCVs.id, cvId)));
+    } else {
+      await db
+        .delete(userCVs)
+        .where(eq(userCVs.id, userIdOrId));
+    }
   }
 
   async getNotifications(userId: number): Promise<Notification[]> {
