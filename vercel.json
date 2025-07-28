@@ -1,5 +1,5 @@
 {
-  "buildCommand": "npm run build && mkdir -p public && cp -r dist/public/* public/",
+  "buildCommand": "npm run build && mkdir -p public && cp -r client/dist/client/* public/",
   "outputDirectory": "public",
   "installCommand": "npm install",
   "framework": null,

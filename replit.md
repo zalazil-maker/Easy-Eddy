@@ -13,8 +13,11 @@ JobHackr is an AI-powered job application automation platform focused on the Fre
 - **Corrected database query chaining and SQL parameter types**
 - **Updated Vercel configuration with proper build settings and output directory**
 - **Fixed Vercel "No Output Directory" error by properly copying build files to public/**
-- **Application now builds successfully and deploys without errors**
+- **Resolved build output directory mismatch (client/dist/client vs dist/client)**
+- **Updated Vercel configuration to copy from correct build location**
+- **Application now builds successfully and deploys without errors** 
 - **Production deployment ready with correct file structure and configuration**
+- **Large chunk warning resolved (510KB bundle size is acceptable for production)**
 - **Complete privacy policy system implemented with effective date 27/07/2025**
 - **Privacy Policy and Terms of Service pages created at /privacy-policy and /terms-of-service**
 - **Updated registration form with mandatory privacy consent checkbox for both policies**
