@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+    <title>Easy Eddy - Job Application Assistant</title>
+    
+    <!-- Browser Compatibility Script -->
+    <script>
+      // Polyfill for older browsers
+      if (!Array.prototype.indexOf) {
+        Array.prototype.indexOf = function(searchElement, fromIndex) {
+          var k;
+          if (this == null) {
+            throw new TypeError('"this" is null or not defined');
+          }
+          var o = Object(this);
+          var len = parseInt(o.length) || 0;
+          if (len === 0) {
+            return -1;
+          }
+          var n = parseInt(fromIndex) || 0;
+          var k;
+          if (n >= 0) {
+            k = n;
+          } else {
+            k = len - Math.abs(n);
+          }
+          if (k >= len) {
+            return -1;
+          }
+          k = Math.max(k, 0);
+          for (; k < len; k++) {
+            if (k in o && o[k] === searchElement) {
+              return k;
+            }
+          }
+          return -1;
+        };
+      }
+      
+      // Polyfill for Array.filter
+      if (!Array.prototype.filter) {
+        Array.prototype.filter = function(fun, thisArg) {
+          'use strict';
+          if (this === void 0 || this === null) {
+            throw new TypeError();
+          }
+          var t = Object(this);
+          var len = parseInt(t.length) || 0;
+          if (typeof fun !== 'function') {
+            throw new TypeError();
+          }
+          var res = [];
+          for (var i = 0; i < len; i++) {
+            if (i in t) {
+              var val = t[i];
+              if (fun.call(thisArg, val, i, t)) {
+                res.push(val);
+              }
+            }
+          }
+          return res;
+        };
+      }
+      
+      // Ensure console exists
+      if (!window.console) {
+        window.console = {
+          log: function() {},
+          error: function() {},
+          warn: function() {},
+          info: function() {}
+        };
+      }
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+    <script src="/debug-continue.js"></script>
+    <!-- This is a replit script which adds a banner on the top of the page when opened in development mode outside the replit environment -->
+    <script type="text/javascript" src="https://replit.com/public/js/replit-dev-banner.js"></script>
+  </body>
+</html>

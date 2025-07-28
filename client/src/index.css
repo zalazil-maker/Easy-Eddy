@@ -1,0 +1,116 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: hsl(0, 0%, 100%);
+  --foreground: hsl(0, 0%, 0%);
+  --muted: hsl(210, 40%, 98%);
+  --muted-foreground: hsl(215, 13%, 45%);
+  --popover: hsl(0, 0%, 100%);
+  --popover-foreground: hsl(0, 0%, 0%);
+  --card: hsl(0, 0%, 100%);
+  --card-foreground: hsl(0, 0%, 0%);
+  --border: hsl(214, 32%, 91%);
+  --input: hsl(214, 32%, 91%);
+  --primary: hsl(142, 71%, 45%);
+  --primary-foreground: hsl(0, 0%, 100%);
+  --secondary: hsl(210, 40%, 98%);
+  --secondary-foreground: hsl(0, 0%, 0%);
+  --accent: hsl(210, 40%, 98%);
+  --accent-foreground: hsl(0, 0%, 0%);
+  --destructive: hsl(0, 84%, 60%);
+  --destructive-foreground: hsl(0, 0%, 100%);
+  --ring: hsl(142, 71%, 45%);
+  --radius: 0.5rem;
+  
+  /* Easy Eddy brand colors */
+  --brand-green: hsl(142, 71%, 45%);
+  --brand-green-dark: hsl(142, 69%, 38%);
+  --brand-green-light: hsl(142, 69%, 70%);
+}
+
+.dark {
+  --background: hsl(0, 0%, 0%);
+  --foreground: hsl(0, 0%, 100%);
+  --muted: hsl(0, 0%, 15%);
+  --muted-foreground: hsl(0, 0%, 65%);
+  --popover: hsl(0, 0%, 0%);
+  --popover-foreground: hsl(0, 0%, 100%);
+  --card: hsl(0, 0%, 0%);
+  --card-foreground: hsl(0, 0%, 100%);
+  --border: hsl(0, 0%, 15%);
+  --input: hsl(0, 0%, 15%);
+  --primary: hsl(142, 71%, 45%);
+  --primary-foreground: hsl(0, 0%, 100%);
+  --secondary: hsl(0, 0%, 15%);
+  --secondary-foreground: hsl(0, 0%, 100%);
+  --accent: hsl(0, 0%, 15%);
+  --accent-foreground: hsl(0, 0%, 100%);
+  --destructive: hsl(0, 84%, 60%);
+  --destructive-foreground: hsl(0, 0%, 100%);
+  --ring: hsl(142, 71%, 45%);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply font-sans antialiased bg-background text-foreground;
+  }
+}
+
+/* Custom brand utilities */
+.text-brand-green {
+  color: var(--brand-green);
+}
+
+.text-brand-green-dark {
+  color: var(--brand-green-dark);
+}
+
+.text-brand-green-light {
+  color: var(--brand-green-light);
+}
+
+.bg-brand-green {
+  background-color: var(--brand-green);
+}
+
+.bg-brand-green-dark {
+  background-color: var(--brand-green-dark);
+}
+
+.bg-brand-green-light {
+  background-color: var(--brand-green-light);
+}
+
+.border-brand-green {
+  border-color: var(--brand-green);
+}
+
+.border-brand-green-light {
+  border-color: var(--brand-green-light);
+}
+
+.hover\:bg-brand-green:hover {
+  background-color: var(--brand-green);
+}
+
+.hover\:bg-brand-green-dark:hover {
+  background-color: var(--brand-green-dark);
+}
+
+.hover\:text-brand-green:hover {
+  color: var(--brand-green);
+}
+
+.hover\:text-brand-green-dark:hover {
+  color: var(--brand-green-dark);
+}
+
+.hover\:border-brand-green:hover {
+  border-color: var(--brand-green);
+}
