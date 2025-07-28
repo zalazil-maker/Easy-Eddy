@@ -65,15 +65,16 @@ async function validateSchema(schema: any, data: any) {
 }
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  // Add API routes directly to app to ensure they're processed before Vite middleware
+  // Create Express router for API routes to ensure they're processed first
+  const router = express.Router();
   
   // JobHackr API test endpoint
-  app.get("/api/test", (req, res) => {
+  router.get("/test", (req, res) => {
     res.json({ message: "JobHackr API working", timestamp: new Date().toISOString() });
   });
 
   // Authentication routes
-  app.post("/api/auth/register", async (req, res) => {
+  router.post("/auth/register", async (req, res) => {
     try {
       const { fullName, email, password, phone, linkedinProfile, acceptPrivacy, acceptTerms } = req.body;
       
@@ -131,7 +132,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post("/api/auth/login", async (req, res) => {
+  router.post("/auth/login", async (req, res) => {
     try {
       const { email, password } = req.body;
       
@@ -140,7 +141,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(401).json({ message: "Invalid credentials" });
       }
 
-      const validPassword = await bcrypt.compare(password, user.password);
+      const validPassword = await bcrypt.compare(password.toString(), user.password.toString());
       if (!validPassword) {
         return res.status(401).json({ message: "Invalid credentials" });
       }
@@ -167,7 +168,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.get("/api/auth/user", async (req, res) => {
+  router.get("/auth/user", async (req, res) => {
     try {
       const ipAddress = req.ip || req.connection.remoteAddress || "unknown";
       const sessionToken = req.headers.authorization?.replace("Bearer ", "");
@@ -191,8 +192,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Check subscription limits and features - direct route
-  app.get("/api/subscriptions/check-limits", async (req, res) => {
+  // Check subscription limits and features
+  router.get("/subscriptions/check-limits", async (req, res) => {
     try {
       const { userId } = req.query;
 
@@ -348,8 +349,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }  
   });
 
-  const router = express.Router();
-
   // --- User Signup ---
   router.post("/api/signup", async (req, res) => {
     const validationError = await validateSchema(insertUserSchema, req.body);
@@ -484,8 +483,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Mount router on app
-  app.use(router);
+  // Mount router on /api path with high priority
+  app.use('/api', router);
 
   // Return HTTP server instance
   return createServer(app);

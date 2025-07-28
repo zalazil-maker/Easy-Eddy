@@ -26,6 +26,10 @@ app.get('/health', (req, res) => {
   });
 });
 
+// Register critical API routes before Vite middleware to prevent interception
+app.use('/auth', express.json());
+app.use('/api', express.json());
+
 // Initialize routes (includes API routes and database setup) - MUST be before Vite
 try {
   console.log(`${new Date().toLocaleTimeString()} [startup] Setting up routes and database...`);
