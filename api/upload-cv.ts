@@ -19,8 +19,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const form = formidable({
       maxFileSize: 5 * 1024 * 1024, // 5MB
       keepExtensions: true,
-      filter: ({ mimetype }) => {
-        return mimetype && mimetype.includes('pdf');
+      filter: (part) => {
+        return !!(part.mimetype && part.mimetype.includes('pdf'));
       }
     });
 

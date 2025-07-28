@@ -1,0 +1,14 @@
+Using TypeScript 5.6.3 (local user-provided)
+api/subscriptions/check-limits.ts(80,40): error TS2538: Type 'null' cannot be used as an index type.
+api/job-search.ts(4,10): error TS2305: Module '"../server/services/realJobSearch"' has no exported member 'realJobSearch'.
+api/job-search.ts(46,36): error TS2339: Property 'dailyApplicationLimit' does not exist on type '{ id: number; createdAt: Date | null; updatedAt: Date | null; userId: number; jobTitles: string[]; industries: string[] | null; companyTypes: string[] | null; companySizes: string[] | null; ... 12 more ...; excludeKeywords: string[] | null; }'.
+api/job-search.ts(66,46): error TS2339: Property 'calculateJobMatch' does not exist on type 'WordMatchingService'.
+api/job-search.ts(66,76): error TS2551: Property 'content' does not exist on type '{ id: number; createdAt: Date | null; updatedAt: Date | null; userId: number; language: string; cvContent: string; fileName: string | null; filePath: string | null; coverLetterTemplate: string | null; }'. Did you mean 'cvContent'?
+api/job-search.ts(76,13): error TS2353: Object literal may only specify known properties, and 'salary' does not exist in type '{ location: string; userId: number; jobTitle: string; company: string; source: string; jobUrl?: string | null | undefined; description?: string | null | undefined; matchScore?: number | null | undefined; status?: string | undefined; jobLanguage?: string | ... 1 more ... | undefined; cvLanguageUsed?: string | ... 1 m...'.
+server/services/realJobSearch.ts(265,53): error TS2339: Property 'matchJobWithProfile' does not exist on type 'WordMatchingService'.
+server/services/realJobSearch.ts(303,9): error TS2353: Object literal may only specify known properties, and 'appliedAt' does not exist in type '{ location: string; userId: number; jobTitle: string; company: string; source: string; jobUrl?: string | null | undefined; description?: string | null | undefined; matchScore?: number | null | undefined; status?: string | undefined; jobLanguage?: string | ... 1 more ... | undefined; cvLanguageUsed?: string | ... 1 m...'.
+Using TypeScript 5.6.3 (local user-provided)
+Using TypeScript 5.6.3 (local user-provided)
+Using TypeScript 5.6.3 (local user-provided)
+api/upload-cv.ts(22,7): error TS2322: Type '({ mimetype }: Part) => boolean | "" | null' is not assignable to type '(part: Part) => boolean'.
+Error: No more than 12 Serverless Functions can be added to a Deployment on the Hobby plan. Create a team (Pro plan) to deploy more. Learn More: https://vercel.link/function-count-limit

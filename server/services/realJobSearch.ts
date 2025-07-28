@@ -261,19 +261,16 @@ export class RealJobSearchService {
     const primaryCV = userCVs.find(cv => cv.language === 'en') || userCVs[0];
     
     for (const job of realJobs) {
-      // Use word matching for scoring
-      const matchResult = await wordMatchingService.matchJobWithProfile(
-        job.description, 
-        criteria, 
-        cvAnalysis, 
-        user
-      );
+      // Use word matching for scoring  
+      const cvData = await storage.getUserCV(userId);
+      const cvAnalysis = await wordMatchingService.analyzeCV(cvData?.cvContent || '');
+      const matchScore = cvAnalysis.score;
       
-      if (matchResult.score > 70) { // Higher threshold for production
+      if (matchScore > 70) { // Higher threshold for production
         matchedJobs.push({
           job,
-          matchScore: matchResult.score,
-          reasoning: matchResult.reasoning
+          matchScore: matchScore,
+          reasoning: 'CV analysis match'
         });
       }
     }
@@ -300,11 +297,11 @@ export class RealJobSearchService {
         company: job.company,
         location: job.location,
         description: job.description,
-        appliedAt: new Date(),
+
         status: "applied",
         source: job.source,
         jobUrl: job.url,
-        applicationText: this.generateProfessionalApplicationText(job, user, primaryCV),
+
         matchScore: match.matchScore,
         jobLanguage: "english",
         cvLanguage: "en"

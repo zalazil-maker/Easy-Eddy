@@ -1,9 +1,10 @@
 import { VercelRequest, VercelResponse } from '@vercel/node';
 import { storage } from "../server/storage";
 import { WordMatchingService } from "../server/services/wordMatchingService";
-import { realJobSearch } from "../server/services/realJobSearch";
+import { RealJobSearchService } from "../server/services/realJobSearch";
 
 const wordMatchingService = new WordMatchingService();
+const realJobSearchService = new RealJobSearchService();
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') {
@@ -43,7 +44,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const today = new Date().toISOString().split('T')[0];
     const todayApplications = await storage.getApplicationsByUserAndDate(userId, today);
     
-    const dailyLimit = jobCriteria.dailyApplicationLimit || 25;
+    const dailyLimit = 25; // Default daily limit
     if (todayApplications.length >= dailyLimit) {
       return res.status(429).json({ 
         error: "Daily application limit reached",
@@ -53,17 +54,18 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
 
     // Search for jobs
-    const jobs = await realJobSearch(jobCriteria);
+    const jobs = await realJobSearchService.searchJobsFromAPIs(jobCriteria);
     let applicationsSubmitted = 0;
-    const results = [];
+    const results: Array<{job: string, company: string, matchScore: number, status: string}> = [];
 
     for (const job of jobs) {
       if (applicationsSubmitted >= (dailyLimit - todayApplications.length)) {
         break; // Stop when we reach the daily limit
       }
 
-      // Calculate match score
-      const matchScore = wordMatchingService.calculateJobMatch(job, userCV.content, jobCriteria);
+      // Calculate match score using CV content
+      const cvAnalysis = await wordMatchingService.analyzeCV(userCV.cvContent);
+      const matchScore = cvAnalysis.score;
       
       if (matchScore >= 70) { // 70% threshold
         try {
@@ -73,12 +75,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             jobTitle: job.title,
             company: job.company,
             location: job.location,
-            salary: job.salary,
+            source: job.source || 'api',
             jobUrl: job.url,
+            description: job.description,
             matchScore,
-            status: 'applied',
-            appliedAt: new Date(),
-            jobDescription: job.description
+            status: 'applied'
           });
 
           results.push({
