@@ -72,6 +72,125 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.json({ message: "JobHackr API working", timestamp: new Date().toISOString() });
   });
 
+  // Authentication routes
+  app.post("/api/auth/register", async (req, res) => {
+    try {
+      const { fullName, email, password, phone, linkedinProfile, acceptPrivacy, acceptTerms } = req.body;
+      
+      if (!acceptPrivacy || !acceptTerms) {
+        return res.status(400).json({ message: "Privacy policy and terms acceptance required" });
+      }
+
+      // Check if user already exists
+      const existingUser = await storage.getUserByEmail(email);
+      if (existingUser) {
+        return res.status(400).json({ message: "User already exists with this email" });
+      }
+
+      // Hash password
+      const hashedPassword = await bcrypt.hash(password, 10);
+      
+      // Get IP address
+      const ipAddress = req.ip || req.connection.remoteAddress || "unknown";
+      
+      // Create user
+      const userData = {
+        fullName,
+        email,
+        password: hashedPassword,
+        phone: phone || null,
+        linkedinProfile: linkedinProfile || null,
+        isApproved: false,
+        hasCompletedOnboarding: false,
+        subscriptionTier: "free",
+        lastLoginIp: ipAddress,
+        privacyAcceptedAt: new Date(),
+        termsAcceptedAt: new Date(),
+      };
+
+      const user = await storage.createUser(userData);
+      
+      // Create session
+      const sessionToken = Math.random().toString(36).substring(7);
+      await storage.createUserSession(user.id, ipAddress, sessionToken);
+
+      res.json({ 
+        success: true, 
+        user: {
+          id: user.id,
+          fullName: user.fullName,
+          email: user.email,
+          isApproved: user.isApproved,
+          hasCompletedOnboarding: user.hasCompletedOnboarding,
+          subscriptionTier: user.subscriptionTier,
+        }
+      });
+    } catch (error) {
+      console.error("Registration error:", error);
+      res.status(500).json({ message: "Registration failed" });
+    }
+  });
+
+  app.post("/api/auth/login", async (req, res) => {
+    try {
+      const { email, password } = req.body;
+      
+      const user = await storage.getUserByEmail(email);
+      if (!user) {
+        return res.status(401).json({ message: "Invalid credentials" });
+      }
+
+      const validPassword = await bcrypt.compare(password, user.password);
+      if (!validPassword) {
+        return res.status(401).json({ message: "Invalid credentials" });
+      }
+
+      // Get IP address and create session
+      const ipAddress = req.ip || req.connection.remoteAddress || "unknown";
+      const sessionToken = Math.random().toString(36).substring(7);
+      await storage.createUserSession(user.id, ipAddress, sessionToken);
+
+      res.json({ 
+        success: true, 
+        user: {
+          id: user.id,
+          fullName: user.fullName,
+          email: user.email,
+          isApproved: user.isApproved,
+          hasCompletedOnboarding: user.hasCompletedOnboarding,
+          subscriptionTier: user.subscriptionTier,
+        }
+      });
+    } catch (error) {
+      console.error("Login error:", error);
+      res.status(500).json({ message: "Login failed" });
+    }
+  });
+
+  app.get("/api/auth/user", async (req, res) => {
+    try {
+      const ipAddress = req.ip || req.connection.remoteAddress || "unknown";
+      const sessionToken = req.headers.authorization?.replace("Bearer ", "");
+      
+      const user = await storage.getUserBySession(ipAddress, sessionToken);
+      if (!user) {
+        return res.status(401).json({ message: "Not authenticated" });
+      }
+
+      res.json({
+        id: user.id,
+        fullName: user.fullName,
+        email: user.email,
+        isApproved: user.isApproved,
+        hasCompletedOnboarding: user.hasCompletedOnboarding,
+        subscriptionTier: user.subscriptionTier,
+      });
+    } catch (error) {
+      console.error("User fetch error:", error);
+      res.status(401).json({ message: "Authentication failed" });
+    }
+  });
+
   // Check subscription limits and features - direct route
   app.get("/api/subscriptions/check-limits", async (req, res) => {
     try {
