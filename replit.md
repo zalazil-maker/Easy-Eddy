@@ -6,6 +6,14 @@ JobHackr is an AI-powered job application automation platform focused on the Fre
 
 ## Recent Changes
 
+### July 28, 2025 - Privacy Policy System & Vercel Deployment Fix
+- **Complete privacy policy system implemented with effective date 27/07/2025**
+- **Privacy Policy and Terms of Service pages created at /privacy-policy and /terms-of-service**
+- **Updated registration form with mandatory privacy consent checkbox for both policies**
+- **Fixed Vercel deployment error: simplified vercel.json to remove problematic runtime specification**
+- **Privacy policy includes contact email merefuker@gmail.com and GDPR compliance**
+- **Terms include detailed subscription tiers and user responsibilities**
+
 ### July 27, 2025 - Subscription Tier Standardization & French Market Focus
 - **Standardized subscription limits: Free tier (10 apps/week), Weekly & Monthly (10 apps/day), Premium (30 apps/day)**
 - **Free tier includes all AI features: language detection, translation, auto cover letters**
