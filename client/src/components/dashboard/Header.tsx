@@ -72,12 +72,12 @@ export default function Header({ user }: HeaderProps) {
                   className="relative p-2 text-gray-400 hover:text-brand-green cursor-pointer"
                 >
                   <Bell size={20} />
-                  {unreadNotifications.length > 0 && (
+                  {(unreadNotifications as any[]).length > 0 && (
                     <Badge 
                       variant="destructive" 
                       className="absolute -top-1 -right-1 h-5 w-5 p-0 flex items-center justify-center text-xs"
                     >
-                      {unreadNotifications.length > 9 ? '9+' : unreadNotifications.length}
+                      {(unreadNotifications as any[]).length > 9 ? '9+' : (unreadNotifications as any[]).length}
                     </Badge>
                   )}
                 </Button>

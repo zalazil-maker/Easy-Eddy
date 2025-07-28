@@ -368,7 +368,7 @@ export class DatabaseStorage implements IStorage {
   async createUserPreferences(preferences: InsertUserPreferences): Promise<UserPreferences> {
     const [prefs] = await db
       .insert(userPreferences)
-      .values(preferences)
+      .values([preferences])
       .returning();
     return prefs;
   }
@@ -658,7 +658,7 @@ export class DatabaseStorage implements IStorage {
       ));
     
     return applications.filter(app => {
-      const appDate = new Date(app.appliedAt);
+      const appDate = app.appliedAt ? new Date(app.appliedAt) : new Date();
       return appDate >= startOfDay && appDate <= endOfDay;
     }).length;
   }

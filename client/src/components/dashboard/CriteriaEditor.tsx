@@ -114,7 +114,7 @@ export default function CriteriaEditor({ userId, criteria }: CriteriaEditorProps
   const removeFromArray = (field: keyof typeof formData, value: string) => {
     setFormData(prev => ({
       ...prev,
-      [field]: prev[field].filter(item => item !== value)
+      [field]: (prev[field] as string[]).filter((item: string) => item !== value)
     }));
   };
 

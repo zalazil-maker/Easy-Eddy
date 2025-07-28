@@ -29,7 +29,7 @@ export default function Notifications({ userId }: NotificationsProps) {
 
   const { data: notifications = [], isLoading } = useQuery({
     queryKey: ['/api/users', userId, 'notifications'],
-    queryFn: () => apiRequest<Notification[]>({
+    queryFn: () => apiRequest({
       url: `/api/users/${userId}/notifications`,
       method: "GET"
     })
@@ -37,7 +37,7 @@ export default function Notifications({ userId }: NotificationsProps) {
 
   const { data: unreadNotifications = [] } = useQuery({
     queryKey: ['/api/users', userId, 'notifications', 'unread'],
-    queryFn: () => apiRequest<Notification[]>({
+    queryFn: () => apiRequest({
       url: `/api/users/${userId}/notifications/unread`,
       method: "GET"
     })
@@ -119,8 +119,8 @@ export default function Notifications({ userId }: NotificationsProps) {
     }
   };
 
-  const displayedNotifications = showAll ? notifications : notifications.slice(0, 5);
-  const unreadCount = unreadNotifications.length;
+  const displayedNotifications = showAll ? (notifications as Notification[]) : (notifications as Notification[]).slice(0, 5);
+  const unreadCount = (unreadNotifications as Notification[]).length;
 
   if (isLoading) {
     return (
@@ -175,7 +175,7 @@ export default function Notifications({ userId }: NotificationsProps) {
         </div>
       </CardHeader>
       <CardContent>
-        {notifications.length === 0 ? (
+        {(notifications as Notification[]).length === 0 ? (
           <div className="space-y-4">
             <div className="text-center py-8 text-gray-500">
               <Bell className="h-12 w-12 mx-auto mb-4 text-gray-300" />
@@ -228,7 +228,7 @@ export default function Notifications({ userId }: NotificationsProps) {
         ) : (
           <div className="space-y-3">
             <ScrollArea className="h-96">
-              {displayedNotifications.map((notification) => (
+              {displayedNotifications.map((notification: Notification) => (
                 <div
                   key={notification.id}
                   className={`p-4 rounded-lg border transition-colors ${
@@ -290,7 +290,7 @@ export default function Notifications({ userId }: NotificationsProps) {
               ))}
             </ScrollArea>
             
-            {notifications.length > 5 && (
+            {(notifications as Notification[]).length > 5 && (
               <div className="text-center pt-4 border-t">
                 <Button
                   variant="ghost"
@@ -304,7 +304,7 @@ export default function Notifications({ userId }: NotificationsProps) {
                   className="text-sm"
                   style={{ cursor: 'pointer' }}
                 >
-                  {showAll ? "Show less" : "Show all " + notifications.length + " notifications"}
+                  {showAll ? "Show less" : "Show all " + (notifications as Notification[]).length + " notifications"}
                 </Button>
               </div>
             )}
