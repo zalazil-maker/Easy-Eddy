@@ -368,7 +368,7 @@ export class DatabaseStorage implements IStorage {
   async createUserPreferences(preferences: InsertUserPreferences): Promise<UserPreferences> {
     const [prefs] = await db
       .insert(userPreferences)
-      .values(preferences)
+      .values([preferences])
       .returning();
     return prefs;
   }
@@ -433,10 +433,10 @@ export class DatabaseStorage implements IStorage {
     return userCV;
   }
 
-  async deleteUserCV(id: number): Promise<void> {
+  async deleteUserCV(userId: number, cvId: number): Promise<void> {
     await db
       .delete(userCVs)
-      .where(eq(userCVs.id, id));
+      .where(and(eq(userCVs.userId, userId), eq(userCVs.id, cvId)));
   }
 
   async getNotifications(userId: number): Promise<Notification[]> {
@@ -506,13 +506,7 @@ export class DatabaseStorage implements IStorage {
       .where(eq(users.id, userId));
   }
 
-  async getUserByEmail(email: string): Promise<User | undefined> {
-    const [user] = await db
-      .select()
-      .from(users)
-      .where(eq(users.email, email));
-    return user;
-  }
+
 
   async getUserById(id: number): Promise<User | undefined> {
     const [user] = await db
@@ -541,8 +535,7 @@ export class DatabaseStorage implements IStorage {
         .select()
         .from(userSessions)
         .innerJoin(users, eq(userSessions.userId, users.id))
-        .where(eq(userSessions.sessionToken, sessionToken))
-        .where(eq(userSessions.isActive, true));
+        .where(and(eq(userSessions.sessionToken, sessionToken), eq(userSessions.isActive, true)));
 
       if (sessionResult.length > 0) {
         // Update last accessed time
@@ -621,11 +614,7 @@ export class DatabaseStorage implements IStorage {
     return user;
   }
 
-  async deleteUserCV(userId: number, cvId: number): Promise<void> {
-    await db
-      .delete(userCVs)
-      .where(and(eq(userCVs.userId, userId), eq(userCVs.id, cvId)));
-  }
+
   // Additional methods for JobHackr
   async getJobCriteriaByUserId(userId: number): Promise<JobCriteria | undefined> {
     return this.getJobCriteria(userId);
@@ -640,8 +629,8 @@ export class DatabaseStorage implements IStorage {
     return this.createUserCV({
       userId: cv.userId,
       language: cv.language,
-      content: cv.content,
-      filename: cv.filename
+      cvContent: cv.content,
+      fileName: cv.filename
     });
   }
 
@@ -698,6 +687,7 @@ export class DatabaseStorage implements IStorage {
       .where(eq(jobApplications.userId, userId));
     
     return applications.filter(app => {
+      if (!app.appliedAt) return false;
       const appDate = new Date(app.appliedAt);
       return appDate >= startOfDay && appDate <= endOfDay;
     });

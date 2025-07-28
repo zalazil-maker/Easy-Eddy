@@ -304,7 +304,7 @@ export class RealJobSearchService {
 
         matchScore: match.matchScore,
         jobLanguage: "english",
-        cvLanguage: "en"
+        cvLanguageUsed: "en"
       };
 
       await storage.createJobApplication(application);
